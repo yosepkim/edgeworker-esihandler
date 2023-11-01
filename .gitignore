@@ -1,0 +1,10 @@
+# System Files
+.DS_Store
+Thumbs.db
+
+# EdgeWorker Files
+edgekv_tokens.js
+tarball.tgz
+
+# Node stuff
+node_modules/
