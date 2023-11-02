@@ -6,16 +6,12 @@ import { TextEncoderStream, TextDecoderStream } from 'text-encode-transform';
 import { logger } from 'log';
 
 export async function responseProvider(request) {
-    return httpRequest(`${request.scheme}://${request.host}${request.url}`).then(async response => {
-        const esiTagRegex = /(<esi:include[^/]*src=['"](.*?)['"][^\/]*\/>)/g;
-        let tagsFoundCount = 0;
-        
+    return httpRequest(`${request.scheme}://${request.host}${request.url}`).then(response => {
+
         try {
-            let responseText = await response.text();
-            let match;
-            while ((match = esiTagRegex.exec(responseText)) != null) { 
-                const taggedContent = match[1]; 
-                const url = match[2];
+            const rewriter = new HtmlRewritingStream();
+            rewriter.onElement('esi\\3A include', async el => {
+                const url = el.getAttribute('src');
 
                 const options = {
                     method: 'GET',
@@ -31,14 +27,11 @@ export async function responseProvider(request) {
                     htmlContent = `<p>Could not get the content</p>`;
                 }
 
-                responseText = responseText.replace(taggedContent, htmlContent);
-                tagsFoundCount = tagsFoundCount + 1;
-            }
-
-            return createResponse(
-                response.status,
-                response.getHeaders(),
-                responseText
+                el.replaceWith(htmlContent);
+            });
+     
+            return createResponse(200, {},
+                    response.body.pipeThrough(rewriter)
             );
 
         } catch (exception) {
@@ -47,7 +40,6 @@ export async function responseProvider(request) {
                 { 'Content-Type': ['application/json'] },
                 JSON.stringify({ 
                     path: request.path,
-                    tagsFoundCount: tagsFoundCount,
                     error: exception,
                     errorMessage: exception.message,
                     stacktrace: exception.stack
