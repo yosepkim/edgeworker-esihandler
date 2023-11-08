@@ -10,8 +10,9 @@ export async function responseProvider(request) {
 
         try {
             const rewriter = new HtmlRewritingStream();
-            rewriter.onElement('esi\\3A include', async el => {
+            rewriter.onElement('esi|include', async el => {
                 const url = el.getAttribute('src');
+                //el.setAttribute('test', '1');
 
                 const options = {
                     method: 'GET',
@@ -19,17 +20,17 @@ export async function responseProvider(request) {
                         'user-agent': 'akamai'
                     }
                 };
-                let htmlContent;
+
                 const contentResponse = await httpRequest(url, options);
+                let htmlContent;
                 if (contentResponse.ok) {
                     htmlContent = await contentResponse.text(); 
                 } else {
                     htmlContent = `<p>Could not get the content</p>`;
                 }
-
                 el.replaceWith(htmlContent);
             });
-     
+
             return createResponse(200, {},
                     response.body.pipeThrough(rewriter)
             );
