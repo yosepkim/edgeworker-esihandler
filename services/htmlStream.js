@@ -1,3 +1,4 @@
+// Comment the following line out, when running test
 import { ReadableStream, WritableStream } from 'streams';
 
 export class HTMLStream {
