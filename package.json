@@ -1,0 +1,14 @@
+{
+  "name": "esihandler",
+  "version": "1.0.0",
+  "description": "[Edge Side Includes (ESI)](https://en.wikipedia.org/wiki/Edge_Side_Includes) is used for dynamically assembling HTML contents on the Edge (i.e. CDN). When a HTML page is requested, an ESI processor running on the Edge intercepts and looks for tags (e.g. `<esi:include src='http://some.com/page' />`, fetches the content from the `src`, then replace the ESI tag with the content.",
+  "type": "module",
+  "devDependencies": {
+    "@stardazed/streams-text-encoding": "^1.0.2",
+    "jest": "^29.7.0",
+    "msw": "^2.0.11"
+  },
+  "dependencies": {
+    "streams": "^0.0.11"
+  }
+}
