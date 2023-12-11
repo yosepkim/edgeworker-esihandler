@@ -1,4 +1,4 @@
-import { Readable } from 'stream';
+import { ReadableStream, WritableStream } from 'streams';
 
 export class HTMLStream {
   constructor (httpRequest) {
@@ -17,8 +17,6 @@ export class HTMLStream {
       if ((match = esiTagRegex.exec(responseText)) !== null) {
         const taggedContent = match[1]; 
         const url = match[2];
-
-        console.log("ME ", url)
 
         const options = {
             method: 'GET',
@@ -55,4 +53,4 @@ export class HTMLStream {
   }
 }
 
-export default HTMLStream
+export default HTMLStream;

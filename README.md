@@ -8,4 +8,8 @@ If your codebase still uses ESI tags and has no longer access to the ESI handler
 
 In the `main.js`, using regex, the code looks for `<esi:include />` tags. The `.exec()` method returns a match at a time, which makes it ideal to handle each occurences. 
 
-The code is for educational purposes only. It does not have any tests and lacks error handling. Also, note that ESI specification has more than the `includes`, which the codebase does not address. 
+The code is for educational purposes only. It does not have minimum tests and lacks error handling. Also, note that ESI specification has more than the `includes`, which the codebase does not address. 
+
+To run tests, execute the following:
+
+`$ node --experimental-vm-modules node_modules/.bin/jest`
