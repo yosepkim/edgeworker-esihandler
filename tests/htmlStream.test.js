@@ -6,11 +6,11 @@ import { fireHttpCall, fakeHttpRequest, streamToString } from './utils/testHelpe
 import { server } from './mocks/server.js';
 
 
-beforeAll(() => server.listen())
-afterEach(() => server.resetHandlers())
-afterAll(() => server.close())
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
 
-test('streams html', async() => {
+test('replaces ESI Include tags', async() => {
 	server.use(
 	  http.get('http://mock.com/source', () => {
 	    return new HttpResponse("hello <esi:include src='http://mock.com/target'/> bye");
@@ -20,7 +20,7 @@ test('streams html', async() => {
 	  })
 	);
 
-	const result = await fireHttpCall("http://mock.com/source", new HTMLStream(fakeHttpRequest));
+	const result = await fireHttpCall("http://mock.com/source", new HTMLStream(fakeHttpRequest, ReadableStream, WritableStream));
 
 	const resultInString = await streamToString(result);
 	expect(resultInString).toBe("hello <div>Replaced!</div> bye");

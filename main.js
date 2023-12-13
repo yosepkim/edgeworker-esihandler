@@ -17,7 +17,7 @@ export async function responseProvider(request) {
           getSafeResponseHeaders(response.getHeaders()),
           response.body
             .pipeThrough(new TextDecoderStream())
-            .pipeThrough(new HTMLStream(httpRequest))
+            .pipeThrough(new HTMLStream(httpRequest, ReadableStream, WritableStream))
             .pipeThrough(new TextEncoderStream())
       );
 

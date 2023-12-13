@@ -1,12 +1,9 @@
-// Comment the following line out, when running test
-import { ReadableStream, WritableStream } from 'streams';
-
 export class HTMLStream {
-  constructor (httpRequest) {
+  constructor (httpRequest, readableStreamClass, writableStreamClass) {
     let readController = null;
     
-    this.readable = new ReadableStream({
-      start (controller) {
+    this.readable = new readableStreamClass({
+      start(controller) {
         readController = controller;
       }
     });
@@ -42,7 +39,7 @@ export class HTMLStream {
 
     let completeProcessing = Promise.resolve();
 
-    this.writable = new WritableStream({
+    this.writable = new writableStreamClass({
       write (text) {
         completeProcessing = handleTemplate(text, 0);
         return completeProcessing;
